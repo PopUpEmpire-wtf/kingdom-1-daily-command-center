@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum DataSource {
+  NOTION
+  TASKADE
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model Project {
+  id          String     @id @default(uuid())
+  source      DataSource
+  externalId  String     // ID from Notion or Taskade
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  lastSyncAt  DateTime   @default(now())
+
+  tasks       Task[]
+
+  @@unique([source, externalId])
+  @@index([source])
+  @@index([status])
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  source      DataSource
+  externalId  String     // ID from Notion or Taskade
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  dueDate     DateTime?
+  tags        String?    // JSON string array
+  assignees   String?    // JSON string array
+  priority    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  lastSyncAt  DateTime   @default(now())
+
+  projectId   String?
+  project     Project?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([source, externalId])
+  @@index([source])
+  @@index([status])
+  @@index([projectId])
+}
+
+model CalendarEvent {
+  id          String     @id @default(uuid())
+  source      DataSource
+  externalId  String     // ID from Notion or Taskade
+  title       String
+  description String?
+  startDate   DateTime
+  endDate     DateTime?
+  allDay      Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  lastSyncAt  DateTime   @default(now())
+
+  @@unique([source, externalId])
+  @@index([source])
+  @@index([startDate])
+}
+
+model CanvasNode {
+  id          String   @id @default(uuid())
+  type        String   // 'integration', 'project', 'document'
+  label       String
+  positionX   Float
+  positionY   Float
+  icon        String?
+  status      String?
+  metadata    String?  // JSON string for additional data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sourceEdges CanvasEdge[] @relation("SourceNode")
+  targetEdges CanvasEdge[] @relation("TargetNode")
+}
+
+model CanvasEdge {
+  id          String   @id @default(uuid())
+  type        String   // 'sync', 'reference', 'dependency'
+  label       String?
+  sourceId    String
+  targetId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  source      CanvasNode @relation("SourceNode", fields: [sourceId], references: [id], onDelete: Cascade)
+  target      CanvasNode @relation("TargetNode", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@index([sourceId])
+  @@index([targetId])
+}
+
+model SyncLog {
+  id          String     @id @default(uuid())
+  source      DataSource
+  status      String     // 'success', 'error', 'partial'
+  message     String?
+  itemsSynced Int        @default(0)
+  createdAt   DateTime   @default(now())
+
+  @@index([source])
+  @@index([createdAt])
+}
