@@ -1,0 +1,95 @@
+{
+  "name": "Energy Check",
+  "description": "Quick system health check across all integrations",
+  "icon": "⚡",
+  "color": "yellow",
+  "actions": [
+    {
+      "type": "url",
+      "value": "https://YOUR_DOMAIN_HERE/api/shortcuts/energy-check"
+    },
+    {
+      "type": "getContentsOfURL",
+      "method": "GET",
+      "headers": {}
+    },
+    {
+      "type": "getDictionary"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.energyLevel",
+      "variable": "energyLevel"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.healthScore",
+      "variable": "healthScore"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.recommendation",
+      "variable": "recommendation"
+    },
+    {
+      "type": "conditional",
+      "condition": "energyLevel == 'high'",
+      "ifTrue": [
+        {
+          "type": "showNotification",
+          "title": "⚡ Energy: HIGH",
+          "body": "Health Score: {healthScore}/100\n{recommendation}",
+          "sound": "default"
+        }
+      ],
+      "ifFalse": [
+        {
+          "type": "conditional",
+          "condition": "energyLevel == 'critical' || energyLevel == 'low'",
+          "ifTrue": [
+            {
+              "type": "showAlert",
+              "title": "⚠️ Energy: {energyLevel}",
+              "message": "Health Score: {healthScore}/100\n\n{recommendation}",
+              "buttons": ["OK", "View Details"]
+            }
+          ],
+          "ifFalse": [
+            {
+              "type": "showNotification",
+              "title": "⚡ Energy: {energyLevel}",
+              "body": "Health Score: {healthScore}/100\n{recommendation}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "configuration": {
+    "showInWidget": true,
+    "addToHomeScreen": true,
+    "shareSheet": false
+  },
+  "automations": {
+    "suggested": [
+      {
+        "trigger": "time",
+        "schedule": "hourly",
+        "hours": "9:00-18:00",
+        "description": "Check system health every hour during work hours"
+      },
+      {
+        "trigger": "time",
+        "schedule": "daily",
+        "time": "09:00",
+        "description": "Morning system check"
+      }
+    ]
+  },
+  "instructions": [
+    "Replace YOUR_DOMAIN_HERE with your deployment URL",
+    "Set up hourly automation for continuous monitoring",
+    "Alert vs Notification based on severity level",
+    "Green = Good, Yellow = Minor issues, Red = Urgent attention needed"
+  ]
+}

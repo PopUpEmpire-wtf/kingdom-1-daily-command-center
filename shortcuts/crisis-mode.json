@@ -1,0 +1,147 @@
+{
+  "name": "Crisis Mode",
+  "description": "Emergency triage for urgent items requiring immediate attention",
+  "icon": "🚨",
+  "color": "red",
+  "actions": [
+    {
+      "type": "url",
+      "value": "https://YOUR_DOMAIN_HERE/api/shortcuts/crisis-mode"
+    },
+    {
+      "type": "getContentsOfURL",
+      "method": "GET",
+      "headers": {}
+    },
+    {
+      "type": "getDictionary"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.crisisLevel",
+      "variable": "crisisLevel"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.criticalCount",
+      "variable": "criticalCount"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.primaryAction",
+      "variable": "primaryAction"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.actionPlan",
+      "variable": "actionPlan"
+    },
+    {
+      "type": "conditional",
+      "condition": "crisisLevel == 'critical' || crisisLevel == 'high'",
+      "ifTrue": [
+        {
+          "type": "showAlert",
+          "title": "🚨 CRISIS MODE: {crisisLevel}",
+          "message": "{criticalCount} critical items\n\n{primaryAction}",
+          "buttons": ["View Action Plan", "Dismiss"]
+        },
+        {
+          "type": "conditional",
+          "condition": "buttonPressed == 'View Action Plan'",
+          "ifTrue": [
+            {
+              "type": "repeatWithEach",
+              "items": "{actionPlan}",
+              "actions": [
+                {
+                  "type": "showNotification",
+                  "title": "Priority {item.priority}: {item.action}",
+                  "body": "{item.items[0]}\n{item.items[1]}\n{item.items[2]}"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "ifFalse": [
+        {
+          "type": "conditional",
+          "condition": "crisisLevel == 'none'",
+          "ifTrue": [
+            {
+              "type": "showNotification",
+              "title": "✅ No Crisis Detected",
+              "body": "{primaryAction}",
+              "sound": "default"
+            }
+          ],
+          "ifFalse": [
+            {
+              "type": "showNotification",
+              "title": "⚠️ Crisis Level: {crisisLevel}",
+              "body": "{criticalCount} items need attention\n\n{primaryAction}",
+              "sound": "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "configuration": {
+    "showInWidget": true,
+    "addToHomeScreen": true,
+    "shareSheet": false,
+    "alwaysRunWhenOpened": true
+  },
+  "automations": {
+    "suggested": [
+      {
+        "trigger": "time",
+        "schedule": "daily",
+        "time": "17:00",
+        "description": "End-of-day crisis check"
+      },
+      {
+        "trigger": "time",
+        "schedule": "daily",
+        "time": "08:30",
+        "description": "Morning crisis assessment"
+      }
+    ]
+  },
+  "severityLevels": {
+    "none": {
+      "color": "green",
+      "icon": "✅",
+      "description": "No immediate crisis"
+    },
+    "low": {
+      "color": "yellow",
+      "icon": "⚠️",
+      "description": "Minor issues detected"
+    },
+    "medium": {
+      "color": "orange",
+      "icon": "⚠️",
+      "description": "Multiple urgent items"
+    },
+    "high": {
+      "color": "red",
+      "icon": "🚨",
+      "description": "High crisis level"
+    },
+    "critical": {
+      "color": "darkred",
+      "icon": "🚨",
+      "description": "CRITICAL: Emergency triage needed"
+    }
+  },
+  "instructions": [
+    "Replace YOUR_DOMAIN_HERE with your deployment URL",
+    "Use before leaving work to catch urgent items",
+    "Critical/High levels trigger alerts instead of notifications",
+    "Action plan provides prioritized steps to resolve issues",
+    "Consider automation for end-of-day checks"
+  ]
+}

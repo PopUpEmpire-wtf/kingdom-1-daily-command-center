@@ -256,6 +256,35 @@ npx prisma migrate reset
 npx prisma generate
 ```
 
+## iOS Shortcuts Widget
+
+Access your command center with one-tap shortcuts from your iOS home screen or widget!
+
+### Available Shortcuts
+
+- **📋 Daily Command** - View today's tasks, events, and action items
+- **🧠 Knowledge Synthesis** - Get insights and patterns across projects  
+- **⚡ Energy Check** - Quick system health check
+- **🚨 Crisis Mode** - Emergency triage for urgent items
+
+### Quick Setup
+
+1. Deploy your app to make it publicly accessible
+2. Follow the setup guide in `/docs/IOS_SHORTCUTS_SETUP.md`
+3. Create shortcuts using templates in `/shortcuts/` directory
+4. Add to home screen and widget for one-tap access
+
+### API Endpoints
+
+All shortcuts use dedicated API endpoints:
+
+- `POST /api/shortcuts/daily-command` - Daily overview
+- `POST /api/shortcuts/knowledge-synthesis` - Weekly insights
+- `GET /api/shortcuts/energy-check` - System health
+- `GET /api/shortcuts/crisis-mode` - Emergency triage
+
+See `/docs/IOS_SHORTCUTS_SETUP.md` for complete documentation and setup instructions.
+
 ## Contributing
 
 Contributions are welcome! Please:
@@ -271,6 +300,7 @@ MIT License
 
 ## Roadmap
 
+- [x] iOS Shortcuts widget integration
 - [ ] Drag-and-drop for Kanban board
 - [ ] Full calendar implementation
 - [ ] Google Calendar integration

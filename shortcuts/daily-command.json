@@ -1,0 +1,55 @@
+{
+  "name": "Daily Command",
+  "description": "Quick access to today's tasks, events, and action items",
+  "icon": "📋",
+  "color": "blue",
+  "actions": [
+    {
+      "type": "url",
+      "value": "https://YOUR_DOMAIN_HERE/api/shortcuts/daily-command"
+    },
+    {
+      "type": "getContentsOfURL",
+      "method": "POST",
+      "headers": {},
+      "body": {
+        "type": "json",
+        "fields": {
+          "date": {
+            "type": "currentDate",
+            "format": "ISO8601"
+          },
+          "includeStats": true
+        }
+      }
+    },
+    {
+      "type": "getDictionary"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.summary",
+      "variable": "summary"
+    },
+    {
+      "type": "showNotification",
+      "title": "📋 Daily Command",
+      "body": "Tasks: {summary.totalTasks} | High Priority: {summary.highPriorityTasks} | Events: {summary.totalEvents} | Projects: {summary.activeProjects}"
+    },
+    {
+      "type": "showResult",
+      "value": "{Dictionary}"
+    }
+  ],
+  "configuration": {
+    "showInWidget": true,
+    "addToHomeScreen": true,
+    "shareSheet": false
+  },
+  "instructions": [
+    "Replace YOUR_DOMAIN_HERE with your deployment URL",
+    "If using authentication, add Authorization header",
+    "Customize notification format to your preference",
+    "Consider setting up morning automation (8 AM daily)"
+  ]
+}

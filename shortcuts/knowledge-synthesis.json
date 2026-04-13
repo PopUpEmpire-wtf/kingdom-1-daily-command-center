@@ -1,0 +1,75 @@
+{
+  "name": "Knowledge Synthesis",
+  "description": "Aggregate insights and patterns across all projects",
+  "icon": "🧠",
+  "color": "purple",
+  "actions": [
+    {
+      "type": "url",
+      "value": "https://YOUR_DOMAIN_HERE/api/shortcuts/knowledge-synthesis"
+    },
+    {
+      "type": "getContentsOfURL",
+      "method": "POST",
+      "headers": {},
+      "body": {
+        "type": "json",
+        "fields": {
+          "timeframe": "week",
+          "includeArchived": false
+        }
+      }
+    },
+    {
+      "type": "getDictionary"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.patterns",
+      "variable": "patterns"
+    },
+    {
+      "type": "getVariable",
+      "path": "data.insights",
+      "variable": "insights"
+    },
+    {
+      "type": "showNotification",
+      "title": "🧠 Knowledge Synthesis",
+      "body": "Projects: {patterns.totalProjects} | Tasks: {patterns.totalTasks} | Completed: {patterns.completedTasks}"
+    },
+    {
+      "type": "repeatWithEach",
+      "items": "{insights}",
+      "actions": [
+        {
+          "type": "showNotification",
+          "title": "{insight.type}",
+          "body": "{insight.message}"
+        }
+      ]
+    },
+    {
+      "type": "showResult",
+      "value": "{Dictionary}"
+    }
+  ],
+  "configuration": {
+    "showInWidget": true,
+    "addToHomeScreen": true,
+    "shareSheet": false
+  },
+  "variables": {
+    "timeframe": {
+      "description": "Time range for analysis",
+      "options": ["day", "week", "month"],
+      "default": "week"
+    }
+  },
+  "instructions": [
+    "Replace YOUR_DOMAIN_HERE with your deployment URL",
+    "Adjust timeframe based on your review cadence",
+    "Consider running weekly for strategic planning",
+    "Insights help identify trends and optimization opportunities"
+  ]
+}
