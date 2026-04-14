@@ -4,23 +4,31 @@ A unified dashboard for project management and planning that integrates **Notion
 
 ## Features
 
-- 📊 **Unified Dashboard** - View projects and tasks from both Notion and Taskade in one place
-- 🔄 **Two-Way Sync** - Changes sync bidirectionally between platforms
+- 📊 **Unified Dashboard** - View projects and tasks from multiple sources in one place
+- 🔄 **Multi-Source Sync** - Sync across Notion, Taskade, iOS Reminders, iOS Notes, TaskFlow, and file system
+- 🔍 **Smart Task Scanner** - Automatically finds TODO comments, FIXME, markdown tasks in your codebase
+- 🤖 **Intelligent Merging** - Deduplicates tasks using fuzzy matching and confidence scoring
 - 📋 **Kanban Board** - Visual project management with status columns
-- 📅 **Calendar View** - See all events and deadlines from both sources
+- 📅 **Calendar View** - See all events and deadlines from all sources
 - 🗺️ **System Map** - Interactive canvas showing integrations and data flow
 - ⚡ **Real-Time Updates** - Taskade webhooks for instant sync
 - 💾 **Local Cache** - Fast performance with SQLite database
+- 📱 **iOS Integration** - Sync with iOS Reminders and Notes
+- 📁 **File System Scanning** - Extract tasks from code comments and markdown files
 
 ## Tech Stack
 
-- **Framework:** Next.js 14 (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Database:** Prisma + SQLite
 - **UI:** Tailwind CSS + Shadcn/ui
 - **Canvas:** React Flow
 - **Integrations:**
   - Notion API (@notionhq/client)
   - Taskade REST API
+  - iCloud CalDAV (iOS Reminders)
+  - File System Scanner
+  - iOS Notes (file-based export)
+  - TaskFlow API
   - Webhooks for real-time sync
 
 ## Getting Started
@@ -285,6 +293,36 @@ All shortcuts use dedicated API endpoints:
 
 See `/docs/IOS_SHORTCUTS_SETUP.md` for complete documentation and setup instructions.
 
+## Unified Task System
+
+Scan and merge tasks from all your sources into one unified view!
+
+### Supported Sources
+
+- ✅ **Notion** - Project databases
+- ✅ **Taskade** - Collaboration tasks
+- 📁 **File System** - TODO/FIXME comments in code
+- 📱 **iOS Reminders** - iCloud Reminders
+- 📝 **iOS Notes** - Tasks from notes
+- 🔄 **TaskFlow** - TaskFlow app
+
+### Features
+
+- **Automatic Scanning**: Finds tasks in your codebase (TODO, FIXME, HACK, markdown checklists)
+- **Smart Merging**: Deduplicates similar tasks across sources using fuzzy matching
+- **Confidence Scoring**: Rates merge accuracy to prevent incorrect matches
+- **Admin Dashboard**: `/admin/sync` for managing all sources
+- **Flexible Sync**: Sync all sources or select specific ones
+
+### Quick Start
+
+1. Add environment variables (see docs)
+2. Run database migration: `npx prisma db push --url=file:./dev.db`
+3. Visit `/admin/sync` to trigger sync
+4. View merged tasks at `/api/unified/merged-tasks`
+
+See `/docs/UNIFIED_TASK_SYSTEM.md` for complete documentation.
+
 ## Contributing
 
 Contributions are welcome! Please:
@@ -301,6 +339,11 @@ MIT License
 ## Roadmap
 
 - [x] iOS Shortcuts widget integration
+- [x] Unified task system with multi-source sync
+- [x] File system task scanner
+- [x] iOS Reminders integration
+- [x] iOS Notes task extraction
+- [x] Intelligent task merging and deduplication
 - [ ] Drag-and-drop for Kanban board
 - [ ] Full calendar implementation
 - [ ] Google Calendar integration
@@ -311,6 +354,7 @@ MIT License
 - [ ] Advanced filtering and search
 - [ ] Dashboard customization
 - [ ] Analytics and insights
+- [ ] AI-powered task categorization
 
 ---
 

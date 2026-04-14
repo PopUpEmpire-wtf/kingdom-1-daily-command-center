@@ -12,6 +12,10 @@ datasource db {
 enum DataSource {
   NOTION
   TASKADE
+  FILESYSTEM
+  IOS_REMINDERS
+  IOS_NOTES
+  TASKFLOW
 }
 
 enum TaskStatus {
@@ -115,11 +119,50 @@ model CanvasEdge {
 model SyncLog {
   id          String     @id @default(uuid())
   source      DataSource
-  status      String     // 'success', 'error', 'partial'
+  status      String     // 'SUCCESS', 'ERROR', 'PARTIAL'
   message     String?
   itemsSynced Int        @default(0)
+  timestamp   DateTime   @default(now())
   createdAt   DateTime   @default(now())
 
   @@index([source])
   @@index([createdAt])
+  @@index([timestamp])
+}
+
+model TaskMapping {
+  id              String     @id @default(uuid())
+  canonicalId     String     // Main task ID (UUID)
+  source          DataSource
+  sourceId        String     // External ID from source
+  sourcePath      String?    // File path or URL
+  confidence      Float      @default(1.0) // Merge confidence (0-1)
+  lastVerified    DateTime   @default(now())
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  @@unique([source, sourceId])
+  @@index([canonicalId])
+  @@index([source])
+}
+
+model FileSystemTask {
+  id          String   @id @default(uuid())
+  filePath    String
+  lineNumber  Int?
+  taskType    String   // 'TODO', 'FIXME', 'HACK', 'NOTE', 'MARKDOWN'
+  content     String
+  context     String?  // Surrounding code/text
+  status      TaskStatus @default(TODO)
+  priority    String?
+  tags        String?
+  metadata    String?  // JSON for additional data
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lastScanAt  DateTime @default(now())
+
+  @@unique([filePath, lineNumber, content])
+  @@index([filePath])
+  @@index([taskType])
+  @@index([status])
 }
