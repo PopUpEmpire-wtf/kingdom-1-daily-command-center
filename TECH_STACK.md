@@ -14,7 +14,7 @@ This document outlines the technology stack and architecture for the Kingdom-1 D
 ### UI & Styling
 **Tailwind CSS 4**
 - Utility-first CSS framework
-- Custom design system via `components.json`
+- Custom design system via CSS variables in `globals.css`
 - PostCSS for processing
 
 **Shadcn/ui Components**
@@ -70,7 +70,7 @@ This document outlines the technology stack and architecture for the Kingdom-1 D
 **Purpose:** Sync projects, tasks, and documents from Notion databases
 
 **Integration Method:**
-- Polling-based sync (60-second intervals)
+- Manual sync endpoint (triggered via external cron or manual API call)
 - Official Notion SDK
 - Implementation: `lib/notion/`
 
@@ -215,7 +215,7 @@ All models include:
 ## Data Flow Architecture
 
 ### Notion → Application
-1. Polling sync every 60 seconds (`/api/notion/sync`)
+1. Manual or cron-triggered sync (`/api/notion/sync`)
 2. Fetch updates from Notion API
 3. Transform to unified schema
 4. Upsert to local SQLite cache
@@ -286,8 +286,11 @@ npm run build          # Production build check
 
 All variables from `.env.local` must be configured in Vercel:
 - Update `NEXT_PUBLIC_APP_URL` to production domain
-- Update Taskade webhook URL to production endpoint
 - Ensure all API keys are valid for production use
+
+### External Configuration
+
+- **Taskade Webhook URL** - Configure in the Taskade dashboard to point to: `https://your-domain.com/api/taskade/webhooks`
 
 ### Build Configuration
 
@@ -301,7 +304,7 @@ All variables from `.env.local` must be configured in Vercel:
 ### Caching Strategy
 - Local SQLite cache reduces API calls
 - React Query automatic cache invalidation
-- 60-second polling interval for Notion
+- Manual/cron-triggered sync for Notion
 - Real-time webhooks for Taskade (no polling)
 
 ### Optimization Techniques
@@ -319,7 +322,7 @@ All variables from `.env.local` must be configured in Vercel:
 ## Security Best Practices
 
 1. **Never commit secrets** - Use `.env.local` + `.gitignore`
-2. **Validate webhook signatures** - Verify Taskade webhook authenticity
+2. **Validate webhook signatures** - (Planned) Verify Taskade webhook authenticity once implemented
 3. **Sanitize user input** - Use Zod for validation
 4. **Use HTTPS in production** - Especially for webhooks
 5. **Rotate API keys regularly** - Update in environment variables
