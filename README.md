@@ -72,6 +72,15 @@ TASKADE_API_TOKEN="xxxxxxxxxxxxx"
 TASKADE_WORKSPACE_ID="xxxxxxxxxxxxx"
 TASKADE_WEBHOOK_SECRET="xxxxxxxxxxxxx"
 
+# Infrastructure Integration (GitHub)
+INFRASTRUCTURE_GITHUB_TOKEN="ghp_xxxxxxxxxxxxx"
+INFRASTRUCTURE_GITHUB_ORG="your-org"
+INFRASTRUCTURE_GITHUB_REPOS="repo1,repo2,repo3"
+
+# Ecosystem-BT Integration
+ECOSYSTEM_BT_API_KEY="xxxxxxxxxxxxx"
+ECOSYSTEM_BT_API_URL="https://api.your-ecosystem-bt.com"
+
 # Application
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
@@ -163,7 +172,15 @@ kingdom-1-daily-command-center/
 Query parameters:
 - `?source=NOTION` - Filter by source
 - `?source=TASKADE` - Filter by source
+- `?source=INFRASTRUCTURE` - Filter by source
+- `?source=ECOSYSTEM_BT` - Filter by source
 - `?status=TODO` - Filter by status
+
+### Infrastructure
+- `POST /api/infrastructure/sync` - Trigger manual sync of GitHub repos and issues
+
+### Ecosystem-BT
+- `POST /api/ecosystem-bt/sync` - Trigger manual sync of Ecosystem-BT projects and tasks
 
 ## Data Flow
 

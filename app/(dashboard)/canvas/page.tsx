@@ -26,6 +26,14 @@ export default function CanvasPage() {
             <span className="text-sm">Taskade (Webhook sync)</span>
           </div>
           <div className="flex items-center gap-3">
+            <div className="h-4 w-16 rounded bg-orange-600"></div>
+            <span className="text-sm">Infrastructure (GitHub API)</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="h-4 w-16 rounded bg-teal-600"></div>
+            <span className="text-sm">Ecosystem-BT (REST API)</span>
+          </div>
+          <div className="flex items-center gap-3">
             <div className="h-4 w-16 rounded bg-green-500"></div>
             <span className="text-sm">Dashboard (Central hub)</span>
           </div>
@@ -45,7 +53,9 @@ export default function CanvasPage() {
         <ul className="space-y-2 text-sm text-blue-800">
           <li>• <strong>Notion:</strong> Polls every 60 seconds for updates and syncs to local cache</li>
           <li>• <strong>Taskade:</strong> Receives real-time webhooks when tasks are created/updated</li>
-          <li>• <strong>Dashboard:</strong> Aggregates data from both sources and displays unified view</li>
+          <li>• <strong>Infrastructure:</strong> Polls GitHub API for repos and issues (automation, scripts, shortcuts)</li>
+          <li>• <strong>Ecosystem-BT:</strong> Polls business tools ecosystem API for projects and tasks</li>
+          <li>• <strong>Dashboard:</strong> Aggregates data from all sources and displays unified view</li>
           <li>• <strong>Local Cache:</strong> SQLite database stores synced data for fast access</li>
         </ul>
       </div>
