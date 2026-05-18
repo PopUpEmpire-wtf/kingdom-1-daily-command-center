@@ -2,10 +2,18 @@ import { prisma } from '@/lib/prisma'
 import { listEcosystemProjects, listEcosystemTasks } from './client'
 import { SyncResult } from '@/types/unified'
 
+function normalizeProjectTitle(project: { name?: string; title?: string }): string {
+  return project.name ?? project.title ?? ''
+}
+
+function normalizeTaskTitle(task: { name?: string; title?: string }): string {
+  return task.name ?? task.title ?? ''
+}
+
 function ecosystemStatusToTaskStatus(status: string): 'TODO' | 'IN_PROGRESS' | 'DONE' {
-  const normalised = status?.toLowerCase()
-  if (normalised === 'done' || normalised === 'completed' || normalised === 'closed') return 'DONE'
-  if (normalised === 'in_progress' || normalised === 'in-progress' || normalised === 'active') return 'IN_PROGRESS'
+  const normalized = status?.toLowerCase()
+  if (normalized === 'done' || normalized === 'completed' || normalized === 'closed') return 'DONE'
+  if (normalized === 'in_progress' || normalized === 'in-progress' || normalized === 'active') return 'IN_PROGRESS'
   return 'TODO'
 }
 
@@ -23,7 +31,7 @@ export async function syncEcosystemBtProjects(): Promise<SyncResult> {
           },
         },
         update: {
-          title: project.name ?? project.title,
+          title: normalizeProjectTitle(project),
           description: project.description ?? null,
           status: ecosystemStatusToTaskStatus(project.status),
           updatedAt: project.updatedAt ? new Date(project.updatedAt) : new Date(),
@@ -32,7 +40,7 @@ export async function syncEcosystemBtProjects(): Promise<SyncResult> {
         create: {
           source: 'ECOSYSTEM_BT',
           externalId: String(project.id),
-          title: project.name ?? project.title,
+          title: normalizeProjectTitle(project),
           description: project.description ?? null,
           status: ecosystemStatusToTaskStatus(project.status),
           createdAt: project.createdAt ? new Date(project.createdAt) : new Date(),
@@ -87,7 +95,7 @@ export async function syncEcosystemBtTasks(): Promise<SyncResult> {
             },
           },
           update: {
-            title: task.name ?? task.title,
+            title: normalizeTaskTitle(task),
             description: task.description ?? null,
             status: ecosystemStatusToTaskStatus(task.status),
             dueDate: task.dueDate ? new Date(task.dueDate) : null,
@@ -100,7 +108,7 @@ export async function syncEcosystemBtTasks(): Promise<SyncResult> {
           create: {
             source: 'ECOSYSTEM_BT',
             externalId: String(task.id),
-            title: task.name ?? task.title,
+            title: normalizeTaskTitle(task),
             description: task.description ?? null,
             status: ecosystemStatusToTaskStatus(task.status),
             dueDate: task.dueDate ? new Date(task.dueDate) : null,

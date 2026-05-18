@@ -40,7 +40,7 @@ export async function listIssues(owner: string, repo: string) {
 
   try {
     const response = await client.get(`/repos/${owner}/${repo}/issues`, {
-      params: { state: 'open', per_page: 100 },
+      params: { state: 'all', per_page: 100 },
     })
     return response.data
   } catch (error) {
