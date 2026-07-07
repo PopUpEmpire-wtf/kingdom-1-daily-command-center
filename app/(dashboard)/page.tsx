@@ -9,6 +9,8 @@ interface Stats {
   bySource: {
     notion: { projects: number; tasks: number }
     taskade: { projects: number; tasks: number }
+    infrastructure: { projects: number; tasks: number }
+    ecosystemBt: { projects: number; tasks: number }
   }
   byStatus: {
     todo: number
@@ -133,6 +135,20 @@ export default function DashboardPage() {
               Projects: {stats?.bySource.taskade.projects || 0} | Tasks: {stats?.bySource.taskade.tasks || 0}
             </p>
             <p className="mt-1 text-xs text-purple-600">Real-time webhooks</p>
+          </div>
+          <div className="rounded-lg border border-orange-200 bg-orange-50 p-4">
+            <h5 className="font-medium text-orange-900">Infrastructure</h5>
+            <p className="mt-2 text-sm text-orange-700">
+              Projects: {stats?.bySource.infrastructure.projects || 0} | Tasks: {stats?.bySource.infrastructure.tasks || 0}
+            </p>
+            <p className="mt-1 text-xs text-orange-600">GitHub repos &amp; issues</p>
+          </div>
+          <div className="rounded-lg border border-teal-200 bg-teal-50 p-4">
+            <h5 className="font-medium text-teal-900">Ecosystem-BT</h5>
+            <p className="mt-2 text-sm text-teal-700">
+              Projects: {stats?.bySource.ecosystemBt.projects || 0} | Tasks: {stats?.bySource.ecosystemBt.tasks || 0}
+            </p>
+            <p className="mt-1 text-xs text-teal-600">Business tools ecosystem</p>
           </div>
         </div>
       </div>

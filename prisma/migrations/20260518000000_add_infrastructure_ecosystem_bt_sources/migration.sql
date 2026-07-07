@@ -1,0 +1,2 @@
+-- AlterEnum (SQLite stores enums as TEXT, no schema change needed)
+-- INFRASTRUCTURE and ECOSYSTEM_BT are now valid DataSource values

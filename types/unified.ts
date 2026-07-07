@@ -1,4 +1,4 @@
-export type DataSource = 'NOTION' | 'TASKADE'
+export type DataSource = 'NOTION' | 'TASKADE' | 'INFRASTRUCTURE' | 'ECOSYSTEM_BT'
 
 export type TaskStatus = 'TODO' | 'IN_PROGRESS' | 'DONE'
 
